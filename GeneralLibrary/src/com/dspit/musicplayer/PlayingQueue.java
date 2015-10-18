@@ -4,28 +4,52 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
-
+/**
+ * A queue which is designed to keep track of the upcoming (but not current) song
+ * that the user would like to play.
+ * 
+ * @author David Boivin (Spit)
+ *
+ */
 public class PlayingQueue implements Queue<Song>{
 	 
 	final protected  Node mHead;
 	protected Node mTail;
 	protected int mSize;
 	
+	/**
+	 * Instantiates the queue with a fixed head and a starting size of zero.
+	 */
 	protected PlayingQueue(){
 		mHead = mTail = new Node();
 		mSize = 0;
 	}
 
+	/**
+	 * @return The size of the queue, meaning the number of elements inside.
+	 */
 	@Override
 	public int size() {
 		return mSize;
 	}
 
+	/**
+	 * @return <b>true</b> if the size of the queue is 0 and <b>false</b> 
+	 * 				otherwise
+	 */
 	@Override
 	public boolean isEmpty() {
 		return mSize == 0;
 	}
 
+	/**
+	 * Checks whether the Object passed as a parameter is of type {@link Node}
+	 * or of type {@link Song} and then sees if it is contained within the queue.
+	 * 
+	 * @param o The object which looked for in the search.
+	 * @return	<b>true></b> if the object is in the list and <b>false</b> 
+	 * 				otherwise.
+	 */
 	@Override
 	public boolean contains(Object o) {
 		
@@ -57,13 +81,37 @@ public class PlayingQueue implements Queue<Song>{
 		//match hasnt been found, so the queue does not contain it.
 		return false;
 	}
-
+	
+	/**
+	 * @return An iterator which iterates through the queue without removing
+	 * 			its elements nor reveling the private data held within the
+	 * 			structure.
+	 */
 	@Override
 	public Iterator<Song> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Iterator<Song>(){
+
+			private Node mCurrent = mHead;
+			
+			@Override
+			public boolean hasNext() {
+				return mCurrent.hasNext();
+			}
+
+			@Override
+			public Song next() {
+				Node t = mCurrent;
+				mCurrent = mCurrent.getNext();
+				return t.getSong();
+			}
+			
+		};
 	}
 
+	/**
+	 * @return The queue in the shape of a newly created array of base type
+	 * 			{@link Object}.
+	 */
 	@Override
 	public Object[] toArray() {
 		
@@ -82,12 +130,31 @@ public class PlayingQueue implements Queue<Song>{
 		return array;
 	}
 
+	/**
+	 * Creates a new array and then turns it into the type of the given parameter
+	 * array. This method assumes that the user of this method knows the type
+	 * of the content held within the queue.
+	 * 
+	 * @param a Parameter primarily used to figure out what type to return 
+	 * 			the newly created array.
+	 * @return The given parameter with a newly assigned array containing all
+	 * 			the elements in the queue.
+	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		a = (T[]) this.toArray();
+		return a;
 	}
 
+	/**
+	 * Method which removes the given object if it is of the same type as the 
+	 * data within the queue. In this case a {@link Song}
+	 * 
+	 * @param o The object to remove from the queue.
+	 * @return <b>true</b> if the parameter object was removed from the queue and
+	 * 			<b>false</b> if not.
+	 */
 	@Override
 	public boolean remove(Object o) {
 		
@@ -113,6 +180,7 @@ public class PlayingQueue implements Queue<Song>{
 			//current node.
 			if(current.getNext().getSong() == t){
 				current.setNext(current.getNext().getNext());
+				mSize--;
 				return true;
 			}
 			
@@ -124,6 +192,14 @@ public class PlayingQueue implements Queue<Song>{
 		return false;
 	}
 
+	/**
+	 * Iterates through the collection and checks if the queue contains each 
+	 * element.
+	 * 
+	 * @param c	The collection of elements to check in the queue.
+	 * @return <b>true</b> if all the elements where found in the queue and <b>
+	 * 				false</b> otherwise.
+	 */
 	@Override
 	public boolean containsAll(Collection<?> c) {
 		
@@ -135,10 +211,18 @@ public class PlayingQueue implements Queue<Song>{
 		return true;
 	}
 
+	/**
+	 * This method uses the  {@link #offer(Song)} to add all the elements in 
+	 * the parameter collection to the queue.
+	 * 
+	 * @param c The collection of elements to add into the queue.
+	 * @return Always returns <b>true</b>
+	 */
 	@Override
 	public boolean addAll(Collection<? extends Song> c){
 		for(Song s : c){
 			this.offer(s);
+			mSize++;
 		}
 		
 		return true;
@@ -160,6 +244,17 @@ public class PlayingQueue implements Queue<Song>{
 		return true;
 	}
 
+	/**
+	 * This method iterates through the queue and checks to see if each element
+	 * is contained in the parameter collection. If the collection does contain
+	 * the element then the element is removed from the collection. If it does
+	 * not, the element is removed from the queue. At the end of the process, if
+	 * the collection still contains elements, then the method returns false.
+	 * 
+	 * @param c The collection of elements to keep in the queue.
+	 * @return <b>true</b> if all the elements of the parameter collection have
+	 * 				been found in the queue and <b>false</b> otherwise.
+	 */
 	@Override
 	public boolean retainAll(Collection<?> c){
 		
@@ -167,7 +262,8 @@ public class PlayingQueue implements Queue<Song>{
 		while(current.hasNext()){
 			
 			if(!c.contains(current.getNext().getSong())){
-				current.setNext(current.getNext().getNext());
+				current.setNext(current.getNext().getNext());	//note: didnt use remove method so as not to run a second loop when i have all the info here
+				mSize--;
 			}else{
 				c.remove(current.getNext().getSong());
 			}
@@ -178,22 +274,33 @@ public class PlayingQueue implements Queue<Song>{
 		return c.isEmpty();
 	}
 
+	/**
+	 * This method simply removes all the elements of the queue.
+	 */
 	@Override
 	public void clear() {
 		mHead.setNext(null);
 		mTail = mHead;
+		mSize = 0;
 	}
-
+	
 	@Override
 	public boolean add(Song e) throws UnsupportedOperationException{
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * Adds the parameter song to the queue.
+	 * 
+	 * @param e
+	 * @return
+	 */
 	@Override
 	public boolean offer(Song e) {
 		Node node = new Node(e, null);
 		mTail.setNext(node);
 		mTail = node;
+		mSize++;
 		return true;
 	}
 
@@ -206,6 +313,7 @@ public class PlayingQueue implements Queue<Song>{
 	public Song poll() {
 		Node t = mHead.getNext();
 		mHead.setNext(mHead.getNext().getNext());
+		mSize--;
 		return t.getSong();
 	}
 
