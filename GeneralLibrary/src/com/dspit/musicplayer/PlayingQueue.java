@@ -8,10 +8,11 @@ import java.util.Queue;
 public class PlayingQueue implements Queue<Song>{
 	 
 	final protected  Node mHead;
+	protected Node mTail;
 	protected int mSize;
 	
 	protected PlayingQueue(){
-		mHead = new Node();
+		mHead = mTail = new Node();
 		mSize = 0;
 	}
 
@@ -65,8 +66,20 @@ public class PlayingQueue implements Queue<Song>{
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Song[] array = new Song[mSize];	//output array
+		
+		//iterates through the queue to put each song in the return array
+		int counter = 0;
+		Node current = mHead;
+		while(current.hasNext()){
+			current = current.getNext();
+			array[counter] = current.getSong();;
+			
+			counter++;
+		}
+		
+		return array;
 	}
 
 	@Override
@@ -77,74 +90,133 @@ public class PlayingQueue implements Queue<Song>{
 
 	@Override
 	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
+		
+		Song t;	//song variable to check against
+		
+		//if the object is either a Node or a Song, turn it into a Song for easier
+		//processing else it cant contain it so false
+		if(o instanceof Node){
+			t = ((Node) o).getSong();
+		}else if(o instanceof Song){
+			t = (Song) o;
+		}else{
+			return false;
+		}
+		
+		//iterate through all of the nodes in the queue and checks to see if
+		//the song they contain is the song which was passed as a parameter.
+		Node current = mHead;
+		while(current.hasNext()){
+
+			//if the nodes song matchs the parameters song, the remove the song 
+			//from the queue by setting the next next song as the next song of the 
+			//current node.
+			if(current.getNext().getSong() == t){
+				current.setNext(current.getNext().getNext());
+				return true;
+			}
+			
+			current = current.getNext();	//swaps the current variable with the next one in line.
+		}
+		
+		//if the loop has exited, all the nodes have been iterated over and a 
+		//match hasnt been found, so the queue does not contain it.
 		return false;
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		for( Object t : c){
+			if(!this.contains(t)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Song> c) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addAll(Collection<? extends Song> c){
+		for(Song s : c){
+			this.offer(s);
+		}
+		
+		return true;
+	}
+
+	/**
+	 * This remove method will always output <b>true</b> even if none of the
+	 * collection elements are in the queue.
+	 * 
+	 * @param c	The collection of elements to remove
+	 * @return <b>true</b>
+	 */
+	@Override
+	public boolean removeAll(Collection<?> c){
+		for(Object s : c){
+			this.remove(s);
+		}
+		
+		return true;
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean retainAll(Collection<?> c){
+		
+		Node current = mHead;
+		while(current.hasNext()){
+			
+			if(!c.contains(current.getNext().getSong())){
+				current.setNext(current.getNext().getNext());
+			}else{
+				c.remove(current.getNext().getSong());
+			}
+			
+			current = current.getNext();
+		}
+		
+		return c.isEmpty();
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		mHead.setNext(null);
+		mTail = mHead;
 	}
 
 	@Override
-	public boolean add(Song e) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean add(Song e) throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean offer(Song e) {
-		// TODO Auto-generated method stub
-		return false;
+		Node node = new Node(e, null);
+		mTail.setNext(node);
+		mTail = node;
+		return true;
 	}
 
 	@Override
-	public Song remove() {
-		// TODO Auto-generated method stub
-		return null;
+	public Song remove() throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Song poll() {
-		// TODO Auto-generated method stub
-		return null;
+		Node t = mHead.getNext();
+		mHead.setNext(mHead.getNext().getNext());
+		return t.getSong();
 	}
 
 	@Override
-	public Song element() {
-		// TODO Auto-generated method stub
-		return null;
+	public Song element() throws UnsupportedOperationException{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Song peek() {
-		// TODO Auto-generated method stub
-		return null;
+		return mHead.getNext().getSong();
 	}
 	
 	/**
