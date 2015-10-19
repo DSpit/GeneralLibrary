@@ -312,8 +312,12 @@ public class PlayingQueue implements Queue<Song>{
 	@Override
 	public Song poll() {
 		Node t = mHead.getNext();
-		mHead.setNext(mHead.getNext().getNext());
-		mSize--;
+		try{
+			mHead.setNext(mHead.getNext().getNext());
+			mSize--;
+		}catch(NullPointerException e){
+			//do nothing (simply the end of queue)
+		}
 		return t.getSong();
 	}
 
