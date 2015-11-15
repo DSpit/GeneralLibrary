@@ -30,11 +30,4 @@ public class Player {
 	public static void main(String[] args){
 		
 	}
-	
-	private class AudioThread extends Thread{
-		
-		public AudioThread(){
-			
-		}
-	}
 }
