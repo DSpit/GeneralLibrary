@@ -2,6 +2,8 @@
 
 package com.dspit.algorithms.numerical;
 
+import java.util.Arrays;
+
 /**
  * Library of general randomization algorithms. All methods are static and
  * so this class is to be used as a tool, rather than an object.
@@ -42,9 +44,9 @@ public final class Random {
 		int[] rSequence = new int[sequenceLength];
 		
 		//fill output sequence with pseudo-random sequence
-		rSequence[0] = (cMulti*seed+cAdd) % mod;
+		rSequence[0] = Math.abs(cMulti*seed+cAdd) % mod;
 		for(int i = 1; i < sequenceLength; ++i){
-			rSequence[i] = (cMulti*rSequence[i-1]+ cAdd) % mod;
+			rSequence[i] = Math.abs(cMulti*rSequence[i-1]+ cAdd) % mod;
 		}
 		
 		return rSequence; 
@@ -91,5 +93,53 @@ public final class Random {
 		return null;
 	}
 	
+	/**
+	 * This method uses the {@link #linearCongruentialGenerator(int, int, int, int, int, int, int)}
+	 * method from this class to randomize the input array. It will generate a random number within 
+	 * the bounds of the input array using the number stored in the current location being randomized 
+	 * within the array as a seed. This gives the algorithm the feature of being able to reproduce the
+	 * "randomized" array given you feed the algorithm the exact same input array. 
+	 * <br><br>Runs in O(N) time, but it is important to note that through running the algorithm 
+	 * multiple times will move the items around more, this does  not mean that the array is any 
+	 * more random, mathematically speaking.
+	 * 
+	 * <br><br><b>NOTE:</b> This method will alter the original array. 
+	 * 
+	 * @param array The array to randomize.
+	 */
+	public static void randomizeArray(int[] array){
+		int add = 17, multi = 11;	//arbitrary (i selected 2 primes)
+		int mod = 100;	//modded 100 because the mod will be turned into a percentage anyway
+		
+		//loop through the array
+		int j = 0, temp = 0;
+		for(int i = 0; i < array.length; ++i){
+			//randomly generate a new index in the array
+			j = Random.linearCongruentialGenerator(1, array[i], multi, add, mod, 0, array.length)[0];
+			
+			//swap original value with the randomly selected new index's value.
+			temp = array[j];
+			array[j] = array[i];
+			array[i] = temp;
+		}
+	}
+	
+	
+	/** TODO
+	 * NOTE: will produce the same sequence of numbers given the same array.
+	 * @param array
+	 * @param selections
+	 * @return
+	 */
+	public static int[] randomlySelect(int[] array, int selections){
+		//create a copy of the array so as to not modify the original
+		//in the processing to find the selections.
+		int[] temp = Arrays.copyOf(array, array.length);
+		
+		//randomize the array so as to select at "randomly" as many elements 
+		//as the parameter dictates to output as the selected elements
+		Random.randomizeArray(temp);
+		return Arrays.copyOf(temp, selections);
+	}
 	
 }

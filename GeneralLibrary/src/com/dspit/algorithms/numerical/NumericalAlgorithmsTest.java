@@ -25,11 +25,23 @@ public final class NumericalAlgorithmsTest {
 		test.randomLinearCongruentialGenerator(50, 3, 409, 235, 2); //NOTE: generates alternating 0 and 1 because all multiplication and addition is being done by odd numbers.
 		test.randomLinearCongruentialGenerator(50, 2, 402, 232, 2);	//NOTE: only generates 0 because all multiplication and addition is being done by even numbers.
 */		
-		for(int i = 0; i < 5; ++i){
+/*		for(int i = 0; i < 5; ++i){
 			test.randomRangedLinearCongruentialGenerator(100, i, 508, 67, 100, 20, 30);
 		}
 		
 		test.randomLinearCongruentialGenerator(100, 6, 508, 67, 100);
+*/
+/*		
+		test.randomizeArray(new int[]{1,2,3,4,5,6,7,8,9,10});
+		int[] testArray = new int[500];
+		for(int i = 0; i < testArray.length; ++i){
+			testArray[i] = (int)(Math.random()*Integer.MAX_VALUE);
+		}
+		test.randomizeArray(Arrays.copyOf(testArray, testArray.length));
+		test.randomizeArray(testArray);
+		test.randomizeArray(testArray);*/
+		
+		test.randomlySelect(new int[]{1,2,3,4,5,6,7,8,9,10}, 3);
 	}
 	
 	public static void randomLinearCongruentialGenerator(int testSequenceLength, int testSeed, int testCMulti, int testCAdd, int testMod){
@@ -123,5 +135,58 @@ public final class NumericalAlgorithmsTest {
 				}
 			}
 			System.out.println("Range Check : " + check);
+	}
+	
+	public static void randomizeArray(int[] array){
+		//introduce
+		System.out.println("Randomizing Array Test for Random Numbers:");
+		
+		//initialized all variables for more efficient testing and accurate elapsed time calculations
+		long startTime;
+		long elapsedTime;
+		int[] input = Arrays.copyOf(array, array.length);
+	
+		//start test
+		System.out.println("Origional Array: " + Arrays.toString(array) + "\nBegin Generating...");
+		startTime = System.nanoTime();
+		Random.randomizeArray(array);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End\n" + 
+							"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+			
+		//read out output and test
+		System.out.println("Output: " + Arrays.toString(array));
+		
+		//checks if any of the old values are in the same index
+		boolean[] check = new boolean[array.length];
+		for(int i = 0; i < array.length; ++i){
+			check[i] = !(array[i] == input[i]);
+		}
+		//read out output and test
+		System.out.println("Is Index different: " + Arrays.toString(check));
+		
+	}
+	
+	public static void randomlySelect(int[] array, int selections){
+		//introduce
+		System.out.println("Randomizing Array Test for Random Numbers:");
+			
+		//initialized all variables for more efficient testing and accurate elapsed time calculations
+		long startTime;
+		long elapsedTime;
+		int[] output;
+	
+		//start
+		System.out.println("Origional Array: " + Arrays.toString(array) + "\nBegin Generating...");
+		startTime = System.nanoTime();
+		output = Random.randomlySelect(array, selections);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+			
+		//read out output and test
+		System.out.println("Output: " + Arrays.toString(output));
 	}
 }
