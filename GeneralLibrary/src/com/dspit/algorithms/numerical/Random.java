@@ -107,8 +107,7 @@ public final class Random {
 	 * 
 	 * @param array The array to randomize.
 	 */
-	public static void randomizeArray(int[] array){
-		int add = 17, multi = 11;	//arbitrary (i selected 2 primes)
+	public static void randomizeArray(int[] array, int add, int multi){
 		int mod = 100;	//modded 100 because the mod will be turned into a percentage anyway
 		
 		//loop through the array
@@ -131,14 +130,14 @@ public final class Random {
 	 * @param selections
 	 * @return
 	 */
-	public static int[] randomlySelect(int[] array, int selections){
+	public static int[] randomlySelect(int[] array, int selections, int randAdd, int randMulti){
 		//create a copy of the array so as to not modify the original
 		//in the processing to find the selections.
 		int[] temp = Arrays.copyOf(array, array.length);
 		
 		//randomize the array so as to select at "randomly" as many elements 
 		//as the parameter dictates to output as the selected elements
-		Random.randomizeArray(temp);
+		Random.randomizeArray(temp, randAdd, randMulti);
 		return Arrays.copyOf(temp, selections);
 	}
 	
