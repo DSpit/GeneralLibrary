@@ -43,9 +43,13 @@ public final class NumericalAlgorithmsTest {
 		
 /*		test.randomlySelect(new int[]{1,2,3,4,5,6,7,8,9,10}, 3);*/
 		
-		test.getGDC(6, 12);//to remove initialization time error
+/*		test.getGDC(6, 12);//to remove initialization time error
 		test.getGDC(6, 12);
-		test.getGDC(982451653, 472882027);
+		test.getGDC(982451653, 472882027);*/
+		
+		test.getFastExp(7, 6);
+		test.getFastExp(7, 6);
+		test.getFastExp(7, 30);
 	}
 	
 	public static void randomLinearCongruentialGenerator(int testSequenceLength, int testSeed, int testCMulti, int testCAdd, int testMod){
@@ -205,9 +209,52 @@ public final class NumericalAlgorithmsTest {
 		
 		//start
 		startTime = System.nanoTime();
-		output = MathTools.GDC(a,b) ;
+		output = MathTools.gdc(a,b) ;
 		elapsedTime = System.nanoTime() - startTime;
 		System.out.println("...End\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+			
+		//read out output and test
+		System.out.println("Output: " + output);
+	}
+	
+	public static void getFastExp(float x, int p){
+		//introduce
+		System.out.println("Fast Exponential Test:");
+		
+		//variables
+		long startTime;
+		long elapsedTime;
+		float output;
+		float baselineOutput;
+		float systemOutput;
+		
+		//start exponential test
+		startTime = System.nanoTime();
+		baselineOutput = MathTools.exp(x,p);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End Exponential test\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+		
+		System.out.println("Baseline: " + baselineOutput);
+		
+		//start system exponential test
+		startTime = System.nanoTime();
+		systemOutput = (float)Math.pow(x,p);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End System test\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+		
+		System.out.println("System: " + systemOutput);
+		
+		//start fast exponential test
+		startTime = System.nanoTime();
+		output = MathTools.fastExp(x,p);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End fast exponential\n" + 
 						"Total Time Taken: " + elapsedTime + "ns ("
 							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
 			
