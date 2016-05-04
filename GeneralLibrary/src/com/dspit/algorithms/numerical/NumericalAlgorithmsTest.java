@@ -2,9 +2,9 @@
 
 package com.dspit.algorithms.numerical;
 
-import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import com.dspit.algorithms.numerical.MathTools;
 
 /**
  * Class used to test all numerical algorithms in this package. Used both for 
@@ -41,7 +41,15 @@ public final class NumericalAlgorithmsTest {
 		test.randomizeArray(testArray);
 		test.randomizeArray(testArray);*/
 		
-		test.randomlySelect(new int[]{1,2,3,4,5,6,7,8,9,10}, 3);
+/*		test.randomlySelect(new int[]{1,2,3,4,5,6,7,8,9,10}, 3);*/
+		
+/*		test.getGDC(6, 12);//to remove initialization time error
+		test.getGDC(6, 12);
+		test.getGDC(982451653, 472882027);*/
+		
+		test.getFastExp(7, 6);
+		test.getFastExp(7, 6);
+		test.getFastExp(7, 30);
 	}
 	
 	public static void randomLinearCongruentialGenerator(int testSequenceLength, int testSeed, int testCMulti, int testCAdd, int testMod){
@@ -149,7 +157,7 @@ public final class NumericalAlgorithmsTest {
 		//start test
 		System.out.println("Origional Array: " + Arrays.toString(array) + "\nBegin Generating...");
 		startTime = System.nanoTime();
-		Random.randomizeArray(array);
+		Random.randomizeArray(array, 17 , 11);
 		elapsedTime = System.nanoTime() - startTime;
 		System.out.println("...End\n" + 
 							"Total Time Taken: " + elapsedTime + "ns ("
@@ -180,7 +188,7 @@ public final class NumericalAlgorithmsTest {
 		//start
 		System.out.println("Origional Array: " + Arrays.toString(array) + "\nBegin Generating...");
 		startTime = System.nanoTime();
-		output = Random.randomlySelect(array, selections);
+		output = Random.randomlySelect(array, selections, 17, 11);
 		elapsedTime = System.nanoTime() - startTime;
 		System.out.println("...End\n" + 
 						"Total Time Taken: " + elapsedTime + "ns ("
@@ -188,5 +196,69 @@ public final class NumericalAlgorithmsTest {
 			
 		//read out output and test
 		System.out.println("Output: " + Arrays.toString(output));
+	}
+	
+	public static void getGDC(int a , int b){
+		//introduce
+		System.out.println("Finding the GDC test for numbers " + a + " and " + b);
+		
+		//variables
+		long startTime;
+		long elapsedTime;
+		int output;
+		
+		//start
+		startTime = System.nanoTime();
+		output = MathTools.gdc(a,b) ;
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+			
+		//read out output and test
+		System.out.println("Output: " + output);
+	}
+	
+	public static void getFastExp(float x, int p){
+		//introduce
+		System.out.println("Fast Exponential Test:");
+		
+		//variables
+		long startTime;
+		long elapsedTime;
+		float output;
+		float baselineOutput;
+		float systemOutput;
+		
+		//start exponential test
+		startTime = System.nanoTime();
+		baselineOutput = MathTools.exp(x,p);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End Exponential test\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+		
+		System.out.println("Baseline: " + baselineOutput);
+		
+		//start system exponential test
+		startTime = System.nanoTime();
+		systemOutput = (float)Math.pow(x,p);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End System test\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+		
+		System.out.println("System: " + systemOutput);
+		
+		//start fast exponential test
+		startTime = System.nanoTime();
+		output = MathTools.fastExp(x,p);
+		elapsedTime = System.nanoTime() - startTime;
+		System.out.println("...End fast exponential\n" + 
+						"Total Time Taken: " + elapsedTime + "ns ("
+							+ TimeUnit.MICROSECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS) + "micros)");
+			
+		//read out output and test
+		System.out.println("Output: " + output);
 	}
 }
