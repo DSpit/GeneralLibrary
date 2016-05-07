@@ -1,4 +1,4 @@
-package com.dspit.data;
+package com.dspit.toolkits.matricies;
 
 public class ArrayMatrix implements Matrix{
 	
