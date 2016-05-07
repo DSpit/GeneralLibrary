@@ -1,4 +1,4 @@
-package com.dspit.musicplayer;
+package com.dspit.apps.musicplayer;
 
 public abstract class AudioThread extends Thread{
 	

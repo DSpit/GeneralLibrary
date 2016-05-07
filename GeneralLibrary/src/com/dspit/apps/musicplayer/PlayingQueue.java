@@ -1,4 +1,4 @@
-package com.dspit.musicplayer;
+package com.dspit.apps.musicplayer;
 
 import java.util.Collection;
 import java.util.Iterator;
