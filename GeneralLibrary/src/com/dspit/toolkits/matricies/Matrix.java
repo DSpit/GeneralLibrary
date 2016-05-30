@@ -1,6 +1,12 @@
 package com.dspit.toolkits.matricies;
 
+import com.dspit.toolkits.matricies.exceptions.UndefinedException;
+
 public interface Matrix {
+	
+	public boolean isConsistent();
+	
+	public boolean hasUniqueSolution();
 	
 	/**
 	 * Method which returns the number of columns in the row, or
@@ -32,91 +38,26 @@ public interface Matrix {
 	public double getValueAt(int rowIndex, int colIndex) 
 										throws IndexOutOfBoundsException;
 	
-	/**
-	 * Method which adds the given row to end of the matrix. The given
-	 * row must have the same number of columns as the matrix that it 
-	 * is being added to. This method should be a direct implementation of 
-	 * {@link #addRow(double[], int)}.
-	 * 
-	 * @param row The row to be added to the matrix.
-	 * 
-	 * @return <b>true</b> if the row is the same size as the matrix 
-	 * 				and has successfully been added and <b>false</b> if 
-	 * 				the given row cannot be added to the matrix.
-	 */
-	public boolean addRow(double[] row);
+	public void setValueAt(int rowIndex, int colIndex)
+										throws IndexOutOfBoundsException;
+	
+	
+	public void multiplyByConstant(int rowIndex, double contant)
+										throws IndexOutOfBoundsException;
+	
+	public void switchRows(int rowIndex, int swapIndex)
+										throws IndexOutOfBoundsException;
+	
+	public void addRowToAnother(int rowIndex, int addIndex, double constant)
+										throws IndexOutOfBoundsException;
 	
 	/**
-	 * Method which adds the given row at the index given. The row
-	 * must have the same number of columns as the matrix that it 
-	 * is being added to.
-	 * 
-	 * @param row The row to be added.
-	 * @param rowIndex The index to add the row at.
-	 * 
-	 * @return <b>true</b> if the row is the same size as the matrix and 
-	 * 				was successfully added at the right index and <b>false</b> if 
-	 * 				the given row cannot be added to the matrix.
-	 */
-	public boolean addRow(double[] row, int rowIndex);
-	
-	/**
-	 * Method which removes the given row from the matrix. This method must
-	 * search and identify which row corresponds to the given row and remove 
-	 * it from the matrix, or return false if it could not match the row.
-	 * 
-	 * @param row Row to match and remove in the matrix
-	 * 
-	 * @return <b>true</b> if the row has been successfully matched and removed and 
-	 * 			<b>false</b> if the row could not be matched or could not be removed.
-	 */
-	public boolean removeRow(double[] row);
-	
-	/**
-	 * Method which removes a row at a given index. 
-	 * 
-	 * @param rowIndex The index of the row to be removed from the matrix.
-	 * 
-	 * @return <b>true</b> if the row has been successfully removed and 
-	 * <b>false</b> false otherwise.
-	 */
-	public boolean removeRow(int rowIndex);
-	
-	/**
-	 * Method which removes the last row of the matrix. This method should be
-	 * a direct implementation of {@link #removeRow(int)}.
-	 * 
-	 * @return <b>true</b> if the row has been successfully removed and
-	 * 				<b>false</b> otherwise.
-	 */
-	public boolean removeLastRow();
-	
-	/**
-	 * Method which determines if the matrix can be considered a square matrix, that is
-	 * it has the same number of columns as it does rows.
-	 * 
-	 * @return <b>true</b> if the matrix is a square matrix and <b>false</b> otherwise.
-	 */
-	public boolean isSquare();
-	
-	/**
-	 * Method which transposes the matrix. 
-	 * <br><br><b>This method alters the current object</b>
-	 * 
-	 * @see #transpose()
-	 */
-	public void toTranspose();
-	
-	/**
-	 * Method which creates a new {@link Matrix} implementing object
-	 * which is the transpose of this current object.
-	 * <br><br><b>This method DOES NOT alter the current object</b>
-	 *
-	 * @return A new matrix which is exactly the transpose of the current object.
-	 * 
-	 * @see #toTranspose()
+	 * Method which generates a new matrix which is transpose (flipped) 
+	 * to the to this current matrix
 	 */
 	public Matrix transpose();
+	
+	public Matrix adjoint();
 	
 	/**
 	 * Method which first determines if the matrix multiplication of 
@@ -135,7 +76,7 @@ public interface Matrix {
 	 * @return The result of the matrix multiplication or <b>null</b> if the 
 	 * 				matrix multiplication is undefined.
 	 */
-	public Matrix multiply(Matrix m);
+	public Matrix multiply(Matrix m) throws UndefinedException;
 	
 	/**
 	 * Method which first determines if the matrix addition of this matrix 
@@ -146,5 +87,5 @@ public interface Matrix {
 	 * @return The result of the matrix addition or <b>null</b> if the 
 	 * 				matrix addition is undefined.
 	 */
-	public Matrix add(Matrix m);
+	public Matrix add(Matrix m) throws UndefinedException;
 }
