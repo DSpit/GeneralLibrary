@@ -1,79 +1,59 @@
 package com.dspit.toolkits.matricies;
 
+import com.dspit.toolkits.matricies.exceptions.UndefinedException;
+
 public class ArrayMatrix implements Matrix{
-	
-	private double[][] mMatrix;
-	
-	public ArrayMatrix(double[][] m){
-		mMatrix = m;
-	}
-	
-	public ArrayMatrix(Matrix m){
-		mMatrix = new double[m.getNumberOfRows()][m.getNumberOfCols()];
-		for(int i = 0; i < m.getNumberOfRows(); ++i){
-			for(int j = 0; j < m.getNumberOfCols(); ++j){
-				mMatrix[i][j] = m.getValueAt(i, j);
-			}
-		}
-	}
-	
+
 	@Override
-	public int getNumberOfRows(){
-		return mMatrix.length;
+	public boolean isConsistent() {
+		// TODO Auto-generated method stub
+		return false;
 	}
-	
+
 	@Override
-	public int getNumberOfCols(){
-		if(this.getNumberOfCols() == 0){
-			return 0;
-		}
+	public boolean hasUniqueSolution() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getNumberOfCols() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNumberOfRows() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getValueAt(int rowIndex, int colIndex) throws IndexOutOfBoundsException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setValueAt(int rowIndex, int colIndex) throws IndexOutOfBoundsException {
+		// TODO Auto-generated method stub
 		
-		return mMatrix[0].length;
-	}
-	
-	@Override
-	public double getValueAt(int rowIndex, int colIndex) throws IndexOutOfBoundsException{
-		try{
-			return mMatrix[rowIndex][colIndex];
-		}catch(IndexOutOfBoundsException e){
-			throw new IndexOutOfBoundsException(String.format("The index at ( %d, %d ) is out of bounds", rowIndex, colIndex));
-		}
-	}
-	
-	@Override
-	public void addRow(double[] row){
-		//TODO
-	}
-	
-	@Override
-	public void addRow(double[] row, int rowIndex){
-		//TODO
-	}
-	
-	@Override
-	public boolean removeRow(double[] row){
-		return false;//TODO
-	}
-	
-	@Override
-	public boolean removeRow(int rowIndex){
-		return false;//TODO
 	}
 
 	@Override
-	public boolean removeLastRow() {
+	public void multiplyByConstant(int rowIndex, double contant) throws IndexOutOfBoundsException {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 	@Override
-	public boolean isSquare() {
+	public void switchRows(int rowIndex, int swapIndex) throws IndexOutOfBoundsException {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 	@Override
-	public void toTranspose() {
+	public void addRowToAnother(int rowIndex, int addIndex, double constant) throws IndexOutOfBoundsException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -85,14 +65,22 @@ public class ArrayMatrix implements Matrix{
 	}
 
 	@Override
-	public Matrix multiply(Matrix m) {
+	public Matrix adjoint() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Matrix add(Matrix m) {
+	public Matrix multiply(Matrix m) throws UndefinedException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Matrix add(Matrix m) throws UndefinedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
 }
